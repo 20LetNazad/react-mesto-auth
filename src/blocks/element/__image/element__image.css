@@ -1,0 +1,8 @@
+.element__image {
+    border-top-left-radius: 3%;
+    border-top-right-radius: 3%;
+    width: 282px;
+    height: 282px;
+    object-fit: cover;
+    cursor: pointer;
+}

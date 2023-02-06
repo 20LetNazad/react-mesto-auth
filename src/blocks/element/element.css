@@ -1,0 +1,18 @@
+.element {
+    position: relative;
+    max-width: 282px;
+    max-height: 361px;
+    background-color: #fff;
+    border-radius: 3%;
+    transition: 0.2s;
+}
+
+.element:hover {
+    opacity: 0.7;
+}
+
+@media screen and (max-width: 1279px) {
+    .element {
+        margin: 0 auto;
+    }
+}

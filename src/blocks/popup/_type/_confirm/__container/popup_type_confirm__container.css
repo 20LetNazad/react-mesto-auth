@@ -1,0 +1,10 @@
+.popup_type_confirm__container {
+    width: 430px;
+    height: 181px;
+}
+
+@media screen and (max-width: 767px) {
+    .popup_type_confirm__container {
+        height: 160px;
+    }
+}
