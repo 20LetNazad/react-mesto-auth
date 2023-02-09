@@ -146,12 +146,12 @@ export default function App() {
               />
             }
           ></Route>
-          <Route path="/sing-in" element={<Login />} />
-          <Route path="/sing-up" element={<Register />} />
+          <Route path="/sign-in" element={<Login />} />
+          <Route path="/sign-up" element={<Register />} />
           <Route
             path="*"
             element={
-              loggedIn ? <Navigate to="/" /> : <Navigate to="/sing-in" />
+              loggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />
             }
           />
         </Routes>
