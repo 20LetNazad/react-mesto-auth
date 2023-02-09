@@ -13,6 +13,7 @@
 @import url(./blocks/add-button/add-button.css);
 @import url(./blocks/profile/profile.css);
 @import url(./blocks/popup/popup.css);
+@import url(./blocks/auth/auth.css);
 
 /* Elements */
 
@@ -44,6 +45,11 @@
 @import url(./blocks/element/__count/element__count.css);
 @import url(./blocks/element/__like-block/element__like-block.css);
 @import url(./blocks/popup/__input-error/popup__input-error.css);
+@import url(./blocks/auth/__title/auth__title.css);
+@import url(./blocks/auth/__input/auth__input.css);
+@import url(./blocks/auth/__button/auth__button.css);
+@import url(./blocks/auth/__subtitle/auth__subtitle.css);
+@import url(./blocks/auth/__link/auth__link.css);
 
 /* Modifiers */
 
