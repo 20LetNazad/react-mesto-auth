@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import api from '../utils/Api';
+import * as Auth from '../utils/Auth';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -99,6 +100,12 @@ export default function App() {
       });
   }
 
+  function handleRegister({ email, password }) {
+    return Auth.register(email, password).then(() => {
+      navigate('/login');
+    });
+  }
+
   function handleEditProfileClick() {
     setEditProfilePopupOpen(true);
   }
@@ -132,22 +139,22 @@ export default function App() {
             element={
               <ProtectedRoute
                 loggedIn={loggedIn}
-                component={
-                  <Main
-                    onEditProfile={handleEditProfileClick}
-                    onAddPlace={handleAddPlaceClick}
-                    onEditAvatar={handleEditAvatarClick}
-                    onCardClick={handleCardClick}
-                    onCardLike={handleCardLike}
-                    onCardDelete={handleCardDelete}
-                    cards={cards}
-                  />
-                }
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+                cards={cards}
+                component={Main}
               />
             }
-          ></Route>
+          />
           <Route path="/sign-in" element={<Login />} />
-          <Route path="/sign-up" element={<Register />} />
+          <Route
+            path="/sign-up"
+            element={<Register onRegister={handleRegister} />}
+          />
           <Route
             path="*"
             element={
