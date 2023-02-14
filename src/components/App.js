@@ -101,8 +101,22 @@ export default function App() {
   }
 
   function handleRegister({ email, password }) {
-    return Auth.register(email, password).then(() => {
-      navigate('/login');
+    return Auth.register(email, password)
+      .then(() => {
+        navigate('/sign-in');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function handleLogin({ email, password }) {
+    return Auth.login(email, password).then((data) => {
+      if (data.token) {
+        localStorage.setItem('jwt', data.jwt);
+        setLoggedIn(true);
+        navigate('/');
+      }
     });
   }
 
@@ -150,7 +164,7 @@ export default function App() {
               />
             }
           />
-          <Route path="/sign-in" element={<Login />} />
+          <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
           <Route
             path="/sign-up"
             element={<Register onRegister={handleRegister} />}
