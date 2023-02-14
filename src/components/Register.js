@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export default function Register({ onRegister }) {
-  const navigate = useNavigate();
-
   const [userData, setUserData] = useState({
     email: '',
     password: '',
@@ -18,13 +16,13 @@ export default function Register({ onRegister }) {
   }
 
   function handleSubmit(e) {
-    onRegister(userData)
-      .then(() => {
-        console.log('Регистрация прошла успешно!');
-      })
-      .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-      });
+    e.preventDefault();
+
+    if (!userData.email || !userData.password) {
+      return;
+    }
+
+    onRegister(userData);
   }
 
   return (
@@ -33,7 +31,6 @@ export default function Register({ onRegister }) {
       <form className="auth__form" onSubmit={handleSubmit}>
         <input
           className="auth__input auth__input_type_email"
-          id="auth__input_email"
           name="email"
           autoComplete="off"
           placeholder="Email"
@@ -45,7 +42,6 @@ export default function Register({ onRegister }) {
         <input
           className="auth__input auth__input_type_password"
           autoComplete="off"
-          id="auth__input_password"
           name="password"
           placeholder="Пароль"
           type="password"
