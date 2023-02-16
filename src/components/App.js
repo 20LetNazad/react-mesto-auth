@@ -15,8 +15,9 @@ import Login from './Login';
 import Register from './Register';
 
 export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
 
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
@@ -34,6 +35,10 @@ export default function App() {
       .catch((err) => {
         console.log(`Ошибка.....: ${err}`);
       });
+  }, []);
+
+  useEffect(() => {
+    handleCheckToken();
   }, []);
 
   function handleCardLike(card) {
@@ -113,11 +118,29 @@ export default function App() {
   function handleLogin({ email, password }) {
     return Auth.login(email, password).then((data) => {
       if (data.token) {
-        localStorage.setItem('jwt', data.jwt);
+        localStorage.setItem('jwt', data.token);
         setLoggedIn(true);
         navigate('/');
       }
     });
+  }
+
+  function handleSignOut() {
+    localStorage.removeItem('jwt');
+    setUserEmail('');
+    setLoggedIn(false);
+    navigate('/sign-in');
+  }
+
+  function handleCheckToken() {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      Auth.getToken(jwt).then((data) => {
+        setLoggedIn(true);
+        setUserEmail(data.data.email);
+        navigate('/');
+      });
+    }
   }
 
   function handleEditProfileClick() {
@@ -146,7 +169,11 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
+        <Header
+          loggedIn={loggedIn}
+          userEmail={userEmail}
+          onSignOut={handleSignOut}
+        />
         <Routes>
           <Route
             path="/"
