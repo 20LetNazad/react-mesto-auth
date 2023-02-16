@@ -54,6 +54,9 @@
 @import url(./blocks/header/__container/header__container.css);
 @import url(./blocks/header/__email/header__email.css);
 @import url(./blocks/header/__link/_type/header__link_type_leave.css);
+@import url(./blocks/popup/__title/_type/popup__title_type_tooltip.css);
+@import url(./blocks/popup/__container/_type/popup__container_type_status.css);
+@import url(./blocks/popup/__status-img/popup__status-img.css);
 
 /* Modifiers */
 

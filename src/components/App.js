@@ -13,6 +13,9 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
+import InfoTooltip from './InfoTooltip';
+import accept from '../images/union_accept.svg';
+import reject from '../images/union_reject.svg';
 
 export default function App() {
   const navigate = useNavigate();
@@ -22,9 +25,12 @@ export default function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  const [isInfoTooltipOpen, setInfoTooltipOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
+  const [textTooltip, setTextTooltip] = useState('');
+  const [imageTooltip, setImageTooltip] = useState('');
 
   useEffect(() => {
     Promise.all([api.userInfo(), api.renderCards()])
@@ -109,9 +115,14 @@ export default function App() {
     return Auth.register(email, password)
       .then(() => {
         navigate('/sign-in');
+        setTextTooltip('Вы успешно зарегистрировались!');
+        setImageTooltip(accept);
+        setInfoTooltipOpen(true);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        setTextTooltip('Что-то пошло не так! Попробуйте ещё раз.');
+        setImageTooltip(reject);
+        setInfoTooltipOpen(true);
       });
   }
 
@@ -163,6 +174,7 @@ export default function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
+    setInfoTooltipOpen(false);
     setSelectedCard(null);
   }
 
@@ -204,6 +216,12 @@ export default function App() {
           />
         </Routes>
         <Footer />
+        <InfoTooltip
+          isOpen={isInfoTooltipOpen}
+          onClose={closeAllPopups}
+          title={textTooltip}
+          src={imageTooltip}
+        />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
