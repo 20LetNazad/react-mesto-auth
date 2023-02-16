@@ -1,6 +1,6 @@
-export default function InfoTooltip({ onClose, title, src }) {
+export default function InfoTooltip({ onClose, isOpen, title, src }) {
   return (
-    <div className="popup popup_type_status popup_opened">
+    <div className={`popup popup_type_status ${isOpen && 'popup_opened'}`}>
       <div className="popup__container popup__container_type_status">
         <button
           aria-label="Закрыть"
@@ -10,7 +10,7 @@ export default function InfoTooltip({ onClose, title, src }) {
           Х
         </button>
         <img src={src} className="popup__status-img" />
-        <h2 className="popup__title popup__title_type_status">{title}</h2>
+        <h2 className="popup__title popup__title_type_tooltip">{title}</h2>
       </div>
     </div>
   );
