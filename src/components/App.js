@@ -29,19 +29,20 @@ export default function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
-  const [textTooltip, setTextTooltip] = useState('');
-  const [imageTooltip, setImageTooltip] = useState('');
+  const [tooltipStatus, setToolTipStatus] = useState({ text: '', image: '' });
 
   useEffect(() => {
-    Promise.all([api.userInfo(), api.renderCards()])
-      .then(([userData, cardData]) => {
-        setCurrentUser(userData);
-        setCards(cardData);
-      })
-      .catch((err) => {
-        console.log(`Ошибка.....: ${err}`);
-      });
-  }, []);
+    if (loggedIn === true) {
+      Promise.all([api.userInfo(), api.renderCards()])
+        .then(([userData, cardData]) => {
+          setCurrentUser(userData);
+          setCards(cardData);
+        })
+        .catch((err) => {
+          console.log(`Ошибка.....: ${err}`);
+        });
+    }
+  }, [loggedIn]);
 
   useEffect(() => {
     handleCheckToken();
@@ -115,25 +116,38 @@ export default function App() {
     return Auth.register(email, password)
       .then(() => {
         navigate('/sign-in');
-        setTextTooltip('Вы успешно зарегистрировались!');
-        setImageTooltip(accept);
+        setToolTipStatus({
+          text: 'Вы успешно зарегистрировались!',
+          image: accept,
+        });
         setInfoTooltipOpen(true);
       })
       .catch(() => {
-        setTextTooltip('Что-то пошло не так! Попробуйте ещё раз.');
-        setImageTooltip(reject);
+        setToolTipStatus({
+          text: 'Что-то пошло не так! Попробуйте ещё раз.',
+          image: reject,
+        });
         setInfoTooltipOpen(true);
       });
   }
 
   function handleLogin({ email, password }) {
-    return Auth.login(email, password).then((data) => {
-      if (data.token) {
-        localStorage.setItem('jwt', data.token);
-        setLoggedIn(true);
-        navigate('/');
-      }
-    });
+    return Auth.login(email, password)
+      .then((data) => {
+        if (data.token) {
+          localStorage.setItem('jwt', data.token);
+          setLoggedIn(true);
+          setUserEmail(email);
+          navigate('/');
+        }
+      })
+      .catch(() => {
+        setToolTipStatus({
+          text: 'Что-то пошло не так! Попробуйте ещё раз.',
+          image: reject,
+        });
+        setInfoTooltipOpen(true);
+      });
   }
 
   function handleSignOut() {
@@ -146,11 +160,15 @@ export default function App() {
   function handleCheckToken() {
     const jwt = localStorage.getItem('jwt');
     if (jwt) {
-      Auth.getToken(jwt).then((data) => {
-        setLoggedIn(true);
-        setUserEmail(data.data.email);
-        navigate('/');
-      });
+      Auth.getToken(jwt)
+        .then((data) => {
+          setLoggedIn(true);
+          setUserEmail(data.data.email);
+          navigate('/');
+        })
+        .catch((err) => {
+          console.log(`Ошибка.....: ${err}`);
+        });
     }
   }
 
@@ -219,8 +237,8 @@ export default function App() {
         <InfoTooltip
           isOpen={isInfoTooltipOpen}
           onClose={closeAllPopups}
-          title={textTooltip}
-          src={imageTooltip}
+          title={tooltipStatus.text}
+          src={tooltipStatus.image}
         />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
