@@ -11,14 +11,8 @@ export default function ImagePopup({ card, onClose }) {
         >
           Х
         </button>
-        <img
-          className="image-popup__img"
-          src={card ? card.link : ''}
-          alt={card ? card.name : ''}
-        />
-        <figcaption className="image-popup__caption">
-          {card ? card.name : ''}
-        </figcaption>
+        <img className="image-popup__img" src={card?.link} alt={card?.name} />
+        <figcaption className="image-popup__caption">{card?.name}</figcaption>
       </figure>
     </div>
   );
